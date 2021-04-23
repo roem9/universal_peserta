@@ -130,7 +130,7 @@
                                                 $item = '<div dir="ltr" class="mb-3">'.$data['data'].'</div>';
                                             }?>
                                     <?php elseif($data['item'] == "audio") :
-                                        $item = '<center><audio controls controlsList="nodownload"><source src="http://localhost/cbt/admin/assets/myaudio/'.$data['file'].'" type="audio/mpeg"></audio></center>'
+                                        $item = '<center><audio controls controlsList="nodownload"><source src="https://admincbt.mrscholae.com/assets/myaudio/'.$data['data'].'" type="audio/mpeg"></audio></center>';
                                     ?>
                                     <?php endif;?>
                                     <div class="shadow card mb-3 soal">
@@ -225,7 +225,7 @@
                                                 $item = '<div dir="ltr" class="mb-3">'.$data['data'].'</div>';
                                             }?>
                                     <?php elseif($data['item'] == "audio") :
-                                        $item = '<center><audio controls controlsList="nodownload"><source src="http://localhost/cbt/admin/assets/myaudio/'.$data['file'].'" type="audio/mpeg"></audio></center>'
+                                        $item = '<center><audio controls controlsList="nodownload"><source src="https://admincbt.mrscholae.com/assets/myaudio/'.$data['data'].'" type="audio/mpeg"></audio></center>';
                                     ?>
                                     <?php endif;?>
                                     <div class="shadow card mb-3 soal">
@@ -315,7 +315,7 @@
                                                 $item = '<div dir="ltr" class="mb-3">'.$data['data'].'</div>';
                                             }?>
                                     <?php elseif($data['item'] == "audio") :
-                                        $item = '<center><audio controls controlsList="nodownload"><source src="http://localhost/cbt/admin/assets/myaudio/'.$data['file'].'" type="audio/mpeg"></audio></center>'
+                                        $item = '<center><audio controls controlsList="nodownload"><source src="https://admincbt.mrscholae.com/assets/myaudio/'.$data['data'].'" type="audio/mpeg"></audio></center>';
                                     ?>
                                     <?php endif;?>
                                     <div class="shadow card mb-3 soal">
