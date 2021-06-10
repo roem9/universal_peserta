@@ -13,7 +13,7 @@
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>Blank page - Tabler - Premium and Open Source dashboard template with responsive and high quality UI.</title>
+    <title><?= $title?></title>
     <!-- CSS files -->
     <link href="<?= base_url()?>assets/css/tabler.min.css" rel="stylesheet"/>
     <link href="<?= base_url()?>assets/css/tabler-flags.min.css" rel="stylesheet"/>
@@ -23,4 +23,5 @@
     <script src="<?= base_url()?>assets/jquery/jquery-3.5.1.min.js"></script>
     <script src="<?= base_url()?>assets/jquery/sweetalert2@9.js"></script>
   </head>
-  <body class="antialiased">
+  <!-- <body class="antialiased" style="background-color: #265D5A"> -->
+  <body class="antialiased" style="background-color: #D3DCE3">

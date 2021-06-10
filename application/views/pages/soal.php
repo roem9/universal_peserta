@@ -1,356 +1,335 @@
 <?php $this->load->view("_partials/header")?>
-    <div class="wrapper" id="elementtoScrollToID">
-        <div class="sticky-top">
-            <?php $this->load->view("_partials/navbar-header")?>
-        </div>
-        <div class="page-wrapper" id="">
-            <div class="page-body">
-                <div class="container-xl">
-                    <div class="row row-cards FieldContainer" data-masonry='{"percentPosition": true }'>
-                        <form action="<?= base_url()?>soal/add_jawaban" method="post" id="formSoal">
-                            <input type="hidden" name="id_tes" value="<?= $id?>">
-                            <div id="dataDiri">
-                                <div class="card mb-3">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Data Diri</h3>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="form-floating mb-3">
-                                            <input type="text" name="email" id="email" class="form-control required">
-                                            <label>Alamat Email</label>
-                                        </div>
-                                        <div class="form-floating mb-3">
-                                            <input type="text" name="nama" id="nama" class="form-control required">
-                                            <label>Nama Lengkap</label>
-                                        </div>
-                                        <div class="form-floating mb-3">
-                                            <input type="text" name="no_wa" id="no_wa" class="form-control required">
-                                            <label>No Whatsapp</label>
-                                        </div>
-                                        <div class="form-floating mb-3">
-                                            <input type="text" name="t4_lahir" id="t4_lahir" class="form-control required">
-                                            <label>Tempat Lahir</label>
-                                        </div>
-                                        <div class="form-floating mb-3">
-                                            <input type="date" name="tgl_lahir" id="tgl_lahir" class="form-control required">
-                                            <label>Tgl Lahir</label>
-                                        </div>
-                                        <div class="form-floating mb-3">
-                                            <textarea name="alamat" class="form-control required" style="height: 100px"></textarea>
-                                            <label for="" class="col-form-label">Alamat</label>
-                                        </div>
-                                        <div class="form-floating mb-3">
-                                            <textarea name="alamat_pengiriman" class="form-control required" style="height: 100px"></textarea>
-                                            <label for="" class="col-form-label">Alamat Pengiriman</label>
-                                            <small id="emailHelp" class="form-text text-danger">Form Alamat pengiriman diisi jika memesan sertifikat</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="d-flex justify-content-end">
-                                        <button type="button" class="btn btn-md btn-success btnNext">
-                                            Next
-                                            <svg width="20" height="20">
-                                                <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-arrow-narrow-right" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
+    <div class="page page-center" id="login">
+        <div class="container-tight py-4">
+            <div class="text-center mb-4">
+                <a href="javascript:void()"><img src="<?= $link['value']?>/assets/img/logo.png" height="80" alt=""></a>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4"><?= $title?></h2>
+                    <?php if( $this->session->flashdata('pesan') ) : ?>
+                        <?= $this->session->flashdata('pesan')?>
+                    <?php else: ?>
+                        <div class="mb-2">
+                            <label class="form-label">
+                            Password
+                            </label>
+                            <div class="input-group input-group-flat">
+                            <input type="password" name="password" class="form-control"  placeholder="Password"  autocomplete="off">
+                            <span class="input-group-text">
+                                <a href="javascript:void(0)" class="link-secondary" title="Show password" data-bs-toggle="tooltip">
+                                <svg width="24" height="24" id="showPassword">
+                                    <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-eye" />
+                                </svg>
+                                <svg width="24" height="24" id="hidePassword" style="display:none">
+                                    <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-eye-off" />
+                                </svg>
+                                </a>
+                            </span>
                             </div>
-
-                            <div id="soalListening" style="display:none">
-                                <div class="form-floating mb-3">
-                                    <select name="fontSize" class="form-control required">
-                                        <option value="">Pilih Ukuran Tulisan</option>
-                                        <option value="">Default</option>
-                                        <option value="20px">20px</option>
-                                        <option value="25px">25px</option>
-                                        <option value="30px">30px</option>
-                                    </select>
-                                    <label>Ukuran Tulisan</label>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="d-flex justify-content-between">
-                                        <button type="button" class="btn btn-md btn-success btnBack">
-                                            <svg width="20" height="20">
-                                                <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-arrow-narrow-left" />
-                                            </svg> 
-                                            Back</button>
-                                        <button type="button" class="btn btn-md btn-success btnNext">
-                                            Next
-                                            <svg width="20" height="20">
-                                                <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-arrow-narrow-right" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
-                                <?php foreach ($listening as $i => $data) :
-                                    $item = "";
-                                ?>
-                                    <?php if($data['item'] == "soal") :?>
-                                        <?php if($data['penulisan'] == "RTL") :?>
-                                            <?php $soal = '<div dir="rtl" class="mb-3">'.$data['data']['soal'].'</div>' ?>
-                                            <input type="hidden" name="cekListening[]" data-id="<?= $i?>" id="cekListening<?= $i?>" value="null">
-                                            <?php $pilihan = "";?>
-                                            <?php foreach ($data['data']['pilihan'] as $k => $choice) :?>
-                                                <?php $pilihan .= '
-                                                    <div class="mb-3">
-                                                    <div class="form-check">
-                                                        <div class="text-right" dir="rtl">
-                                                            <label>
-                                                                <input type="radio" class="soal_listening" data-id="'.$i.'" id="soal_listening'.$i.$k.'" name="soal_listening['.$i.']" value="'.$choice.'" checked> 
-                                                                '.$choice.'
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>' ?>
-                                            <?php endforeach;?>
-                                            <?php $item = $soal.$pilihan;?>
-                                        <?php else :?>
-                                            <?php $soal = '<div class="mb-3">'.$data['data']['soal'].'</div>' ?>
-                                            <input type="hidden" name="cekListening[]" data-id="<?= $i?>" id="cekListening<?= $i?>" value="null">
-                                            <?php $pilihan = "";?>
-                                            <?php foreach ($data['data']['pilihan'] as $choice) :?>
-                                                <?php $pilihan .= '
-                                                    <div class="mb-3">
-                                                    <div class="form-check">
-                                                        <label>
-                                                            <input type="radio" class="soal_listening" data-id="'.$i.'" id="soal_listening'.$i.$k.'" name="soal_listening['.$i.']" value="'.$choice.'" checked> 
-                                                            '.$choice.'
-                                                        </label>
-                                                    </div>
-                                                </div>' ?>
-                                            <?php endforeach;?>
-                                            <?php $item = $soal.$pilihan;?>
-                                        <?php endif;?>
-                                    <?php elseif($data['item'] == "petunjuk") :
-                                            if($data['penulisan'] == "RTL"){
-                                                $item = '<div dir="rtl" class="mb-3">'.$data['data'].'</div>';
-                                            } else {
-                                                $item = '<div dir="ltr" class="mb-3">'.$data['data'].'</div>';
-                                            }?>
-                                    <?php elseif($data['item'] == "audio") :
-                                        $item = '<center><audio controls controlsList="nodownload"><source src="https://admincbt.mrscholae.com/assets/myaudio/'.$data['data'].'" type="audio/mpeg"></audio></center>';
-                                    ?>
-                                    <?php endif;?>
-                                    <div class="shadow card mb-3 soal">
-                                        <div class="card-body" id="soalListening<?= $i?>">
-                                            
-                                            <?= $item?>
-                        
-                                        </div>
-                                    </div>
-                                <?php endforeach;?>
-                                <div class="mb-3">
-                                    <div class="d-flex justify-content-between">
-                                        <button type="button" class="btn btn-md btn-success btnBack">
-                                            <svg width="20" height="20">
-                                                <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-arrow-narrow-left" />
-                                            </svg> 
-                                            Back</button>
-                                        <button type="button" class="btn btn-md btn-success btnNext">
-                                            Next
-                                            <svg width="20" height="20">
-                                                <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-arrow-narrow-right" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="soalStructure" style="display:none">
-                                <div class="form-floating mb-3">
-                                    <select name="fontSize" class="form-control required">
-                                        <option value="">Pilih Ukuran Tulisan</option>
-                                        <option value="">Default</option>
-                                        <option value="20px">20px</option>
-                                        <option value="25px">25px</option>
-                                        <option value="30px">30px</option>
-                                    </select>
-                                    <label>Ukuran Tulisan</label>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="d-flex justify-content-end">
-                                        <button type="button" class="btn btn-md btn-success btnNext">
-                                            Next
-                                            <svg width="20" height="20">
-                                                <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-arrow-narrow-right" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
-                                <?php foreach ($structure as $i => $data) :
-                                    $item = "";
-                                ?>
-                                    <?php if($data['item'] == "soal") :?>
-                                        <?php if($data['penulisan'] == "RTL") :?>
-                                            <?php $soal = '<div dir="rtl" class="mb-3">'.$data['data']['soal'].'</div>' ?>
-                                            <input type="hidden" name="cekStructure[]" data-id="<?= $i?>" id="cekStructure<?= $i?>" value="null">
-                                            <?php $pilihan = "";?>
-                                            <?php foreach ($data['data']['pilihan'] as $k => $choice) :?>
-                                                <?php $pilihan .= '
-                                                    <div class="mb-3">
-                                                    <div class="form-check">
-                                                        <div class="text-right" dir="rtl">
-                                                            <label>
-                                                                <input type="radio" class="soal_structure" data-id="'.$i.'" id="soal_structure'.$i.$k.'" name="soal_structure['.$i.']" value="'.$choice.'" checked> 
-                                                                '.$choice.'
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>' ?>
-                                            <?php endforeach;?>
-                                            <?php $item = $soal.$pilihan;?>
-                                        <?php else :?>
-                                            <?php $soal = '<div class="mb-3">'.$data['data']['soal'].'</div>' ?>
-                                            <input type="hidden" name="cekStructure[]" data-id="<?= $i?>" id="cekStructure<?= $i?>" value="null">
-                                            <?php $pilihan = "";?>
-                                            <?php foreach ($data['data']['pilihan'] as $choice) :?>
-                                                <?php $pilihan .= '
-                                                    <div class="mb-3">
-                                                    <div class="form-check">
-                                                        <label>
-                                                            <input type="radio" class="soal_structure" data-id="'.$i.'" id="soal_structure'.$i.$k.'" name="soal_structure['.$i.']" value="'.$choice.'" checked> 
-                                                            '.$choice.'
-                                                        </label>
-                                                    </div>
-                                                </div>' ?>
-                                            <?php endforeach;?>
-                                            <?php $item = $soal.$pilihan;?>
-                                        <?php endif;?>
-                                    <?php elseif($data['item'] == "petunjuk") :
-                                            if($data['penulisan'] == "RTL"){
-                                                $item = '<div dir="rtl" class="mb-3">'.$data['data'].'</div>';
-                                            } else {
-                                                $item = '<div dir="ltr" class="mb-3">'.$data['data'].'</div>';
-                                            }?>
-                                    <?php elseif($data['item'] == "audio") :
-                                        $item = '<center><audio controls controlsList="nodownload"><source src="https://admincbt.mrscholae.com/assets/myaudio/'.$data['data'].'" type="audio/mpeg"></audio></center>';
-                                    ?>
-                                    <?php endif;?>
-                                    <div class="shadow card mb-3 soal">
-                                        <div class="card-body" id="soalStructure<?= $i?>">
-
-                                            <?= $item?>
-                        
-                                        </div>
-                                    </div>
-                                <?php endforeach;?>
-                                <div class="mb-3">
-                                    <div class="d-flex justify-content-end">
-                                        <button type="button" class="btn btn-md btn-success btnNext">
-                                            Next
-                                            <svg width="20" height="20">
-                                                <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-arrow-narrow-right" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div id="soalReading" style="display:none">
-                                <div class="form-floating mb-3">
-                                    <select name="fontSize" class="form-control required">
-                                        <option value="">Pilih Ukuran Tulisan</option>
-                                        <option value="">Default</option>
-                                        <option value="20px">20px</option>
-                                        <option value="25px">25px</option>
-                                        <option value="30px">30px</option>
-                                    </select>
-                                    <label>Ukuran Tulisan</label>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="d-flex justify-content-end">
-                                        <button type="button" class="btn btn-md btn-primary btnNext">
-                                            <svg width="20" height="20" class="me-1">
-                                                <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-device-floppy" />
-                                            </svg>
-                                            Simpan
-                                        </button>
-                                    </div>
-                                </div>
-                                <?php foreach ($reading as $i => $data) :
-                                    $item = "";
-                                ?>
-                                    <?php if($data['item'] == "soal") :?>
-                                        <?php if($data['penulisan'] == "RTL") :?>
-                                            <?php $soal = '<div dir="rtl" class="mb-3">'.$data['data']['soal'].'</div>' ?>
-                                            <input type="hidden" name="cekReading[]" data-id="<?= $i?>" id="cekReading<?= $i?>" value="null">
-                                            <?php $pilihan = "";?>
-                                            <?php foreach ($data['data']['pilihan'] as $k => $choice) :?>
-                                                <?php $pilihan .= '
-                                                    <div class="mb-3">
-                                                    <div class="form-check">
-                                                        <div class="text-right" dir="rtl">
-                                                            <label>
-                                                                <input type="radio" class="soal_reading" data-id="'.$i.'" id="soal_reading'.$i.$k.'" name="soal_reading['.$i.']" value="'.$choice.'" checked> 
-                                                                '.$choice.'
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>' ?>
-                                            <?php endforeach;?>
-                                            <?php $item = $soal.$pilihan;?>
-                                        <?php else :?>
-                                            <?php $soal = '<div class="mb-3">'.$data['data']['soal'].'</div>' ?>
-                                            <input type="hidden" name="cekReading[]" data-id="<?= $i?>" id="cekReading<?= $i?>" value="null">
-                                            <?php $pilihan = "";?>
-                                            <?php foreach ($data['data']['pilihan'] as $choice) :?>
-                                                <?php $pilihan .= '
-                                                    <div class="mb-3">
-                                                    <div class="form-check">
-                                                        <label>
-                                                            <input type="radio" class="soal_reading" data-id="'.$i.'" id="soal_reading'.$i.$k.'" name="soal_reading['.$i.']" value="'.$choice.'" checked> 
-                                                            '.$choice.'
-                                                        </label>
-                                                    </div>
-                                                </div>' ?>
-                                            <?php endforeach;?>
-                                            <?php $item = $soal.$pilihan;?>
-                                        <?php endif;?>
-                                    <?php elseif($data['item'] == "petunjuk") :
-                                            if($data['penulisan'] == "RTL"){
-                                                $item = '<div dir="rtl" class="mb-3">'.$data['data'].'</div>';
-                                            } else {
-                                                $item = '<div dir="ltr" class="mb-3">'.$data['data'].'</div>';
-                                            }?>
-                                    <?php elseif($data['item'] == "audio") :
-                                        $item = '<center><audio controls controlsList="nodownload"><source src="https://admincbt.mrscholae.com/assets/myaudio/'.$data['data'].'" type="audio/mpeg"></audio></center>';
-                                    ?>
-                                    <?php endif;?>
-                                    <div class="shadow card mb-3 soal">
-                                        <div class="card-body" id="soalReading<?= $i?>">
-
-                                            <?= $item?>
-                        
-                                        </div>
-                                    </div>
-                                <?php endforeach;?>
-                                <div class="mb-3">
-                                    <div class="d-flex justify-content-end">
-                                        <button type="button" class="btn btn-md btn-primary btnNext">
-                                            <svg width="20" height="20" class="me-1">
-                                                <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-device-floppy" />
-                                            </svg>
-                                            Simpan
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-
+                        </div>
+                        <div class="form-footer">
+                            <button type="button" class="btn btn-primary w-100 btnSignIn">Masuk</button>
+                        </div>
+                    <?php endif;?>
                 </div>
             </div>
-            <?php $this->load->view("_partials/footer-bar")?>
         </div>
     </div>
+    <div id="soal_tes" style="display: none">
+        <div class="wrapper" id="elementtoScrollToID">
+            <div class="sticky-top">
+                <?php $this->load->view("_partials/navbar-header")?>
+            </div>
+            <div class="page-wrapper" id="">
+                <div class="page-body">
+                    <div class="container-xl">
+                        <div class="row row-cards FieldContainer" data-masonry='{"percentPosition": true }'>
+                            <?php if($soal['tipe_soal'] == "TOAFL" || $soal['tipe_soal'] == "TOEFL") :?>
+                                <form action="<?= base_url()?>soal/add_jawaban_toefl" method="post" id="formSoal">
+                            <?php else :?>
+                                <form action="<?= base_url()?>soal/add_jawaban" method="post" id="formSoal">
+                            <?php endif;?>
+                                <input type="hidden" name="id_tes" value="<?= $id?>">
+                                <div id="sesi-0">
+                                    <div class="card mb-3">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Data Diri</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <?php foreach ($form as $form) :?>
+                                                <div class="form-floating mb-3">
+                                                    <?php if($form['type'] == "text") :?>
+                                                        <input type="text" name="<?= $form['name']?>" class="form-control <?= $form['format']?> <?= $form['required']?>">
+                                                    <?php elseif($form['type'] == "date") :?>
+                                                        <input type="date" name="<?= $form['name']?>" class="form-control <?= $form['required']?>">
+                                                    <?php elseif($form['type'] == "textarea") :?>
+                                                        <textarea name="<?= $form['name']?>" class="form-control <?= $form['required']?>" data-bs-toggle="autosize"></textarea>
+                                                    <?php endif;?>
+                                                    <label><?= $form['label']?></label>
+                                                    <?php if($form['help'] != ""):?>
+                                                        <small id="emailHelp" class="form-text text-danger"><?= $form['help']?></small>
+                                                    <?php endif;?>
+                                                </div>
+                                            <?php endforeach;?>
+                                            <!-- <div class="form-floating mb-3">
+                                                <input type="text" name="email" class="form-control required">
+                                                <label>Alamat Email</label>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <input type="text" name="nama" class="form-control required">
+                                                <label>Nama Lengkap</label>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <input type="text" name="no_wa" class="form-control required">
+                                                <label>No Whatsapp</label>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <input type="text" name="t4_lahir" class="form-control required">
+                                                <label>Tempat Lahir</label>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <input type="date" name="tgl_lahir" class="form-control required">
+                                                <label>Tgl Lahir</label>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <textarea name="alamat" class="form-control required" data-bs-toggle="autosize"></textarea>
+                                                <label for="" class="col-form-label">Alamat</label>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <textarea name="alamat_pengiriman" class="form-control" data-bs-toggle="autosize"></textarea>
+                                                <label for="" class="col-form-label">Alamat Pengiriman</label>
+                                                <small id="emailHelp" class="form-text text-danger">Form Alamat pengiriman diisi jika memesan sertifikat</small>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-end">
+                                            <button type="button" class="btn btn-md btn-success btnNext" data-id="sesi-1">
+                                                Next
+                                                <svg width="20" height="20">
+                                                    <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-arrow-narrow-right" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <?php 
+                                    $index = 1;
+                                    $jumlah_sesi = COUNT($sesi);
+                                    foreach ($sesi as $sesi) :?>
+                                    <div id="sesi-<?=$index?>" style="display: none">
+
+                                        <div class="form-floating mb-3">
+                                            <select name="fontSize" class="form-control required">
+                                                <option value="">Pilih Ukuran Tulisan</option>
+                                                <option value="">Default</option>
+                                                <option value="20px">20px</option>
+                                                <option value="25px">25px</option>
+                                                <option value="30px">30px</option>
+                                            </select>
+                                            <label>Ukuran Tulisan</label>
+                                        </div>
+                                        <div class="mb-3">
+                                            <!-- jika index = 1, tampilkan tombol back else hanya tampilkan tombol next  -->
+                                            <?php if($index == $jumlah_sesi && $jumlah_sesi != 1) :?>
+                                                <div class="d-flex justify-content-end">
+                                                    <button type="button" class="btn btn-md btn-primary btnSimpan" data-id="sesi-<?= $index + 1?>">
+                                                        <svg width="20" height="20">
+                                                            <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-device-floppy" />
+                                                        </svg>
+                                                        Simpan
+                                                    </button>
+                                                </div>
+                                            <?php elseif($index == $jumlah_sesi && $jumlah_sesi == 1) :?>
+                                                <div class="d-flex justify-content-between">
+                                                    <button type="button" class="btn btn-md btn-success btnBack" data-id="sesi-<?= $index - 1?>">
+                                                        <svg width="20" height="20">
+                                                            <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-arrow-narrow-left" />
+                                                        </svg> 
+                                                        Back</button>
+                                                    <button type="button" class="btn btn-md btn-primary btnSimpan" data-id="sesi-<?= $index + 1?>">
+                                                        <svg width="20" height="20">
+                                                            <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-device-floppy" />
+                                                        </svg>
+                                                        Simpan
+                                                    </button>
+                                                </div>
+                                            <?php elseif($index == 1) :?>
+                                                <div class="d-flex justify-content-between">
+                                                    <button type="button" class="btn btn-md btn-success btnBack" data-id="sesi-<?= $index - 1?>">
+                                                        <svg width="20" height="20">
+                                                            <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-arrow-narrow-left" />
+                                                        </svg> 
+                                                        Back</button>
+                                                    <button type="button" class="btn btn-md btn-success btnNext" data-id="sesi-<?= $index + 1?>">
+                                                        Next
+                                                        <svg width="20" height="20">
+                                                            <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-arrow-narrow-right" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            <?php else :?>
+                                                <div class="d-flex justify-content-end">
+                                                    <button type="button" class="btn btn-md btn-success btnNext" data-id="sesi-<?= $index + 1?>">
+                                                        Next
+                                                        <svg width="20" height="20">
+                                                            <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-arrow-narrow-right" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            <?php endif;?>
+                                        </div>
+                                        <input type="hidden" name="sesi-<?=$index + 1?>" value="<?= $sesi['jumlah_soal']?>">
+                                        <input type="hidden" name="kunci_sesi[]" value="<?= $sesi['id_sub']?>">
+                                        <?php foreach ($sesi['soal'] as $i => $data) :
+                                            $item = "";
+                                            ?>
+                                            <?php if($data['item'] == "soal") :?>
+                                                <?php if($data['penulisan'] == "RTL") :?>
+                                                    <?php $soal = '<div dir="rtl" class="mb-3">'.$data['data']['soal'].'</div>' ?>
+                                                    <input type="hidden" name="jawaban_sesi_<?= $index?>[]" data-id="soal-<?= $i?>" id="jawaban_sesi_<?= $index?><?= $i?>" value="null">
+                                                    <?php $pilihan = "";?>
+                                                    <?php foreach ($data['data']['pilihan'] as $k => $choice) :?>
+                                                        <?php $pilihan .= '
+                                                            <div class="mb-3">
+                                                                <div class="form-check">
+                                                                    <div class="text-right" dir="rtl">
+                                                                        <label>
+                                                                            <input type="radio" data-id="'.$index.'|'.$i.'"  name="radio-'.$index.'['.$i.']" value="'.$choice.'"> 
+                                                                            '.$choice.'
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>' ?>
+                                                    <?php endforeach;?>
+                                                    <?php $item = $soal.$pilihan;?>
+                                                <?php else :?>
+                                                    <?php $soal = '<div class="mb-3">'.$data['data']['soal'].'</div>' ?>
+                                                    <input type="hidden" name="jawaban_sesi_<?= $index?>[]" data-id="soal-<?= $i?>" id="jawaban_sesi_<?= $index?><?= $i?>" value="null">
+                                                    <?php $pilihan = "";?>
+                                                    <?php foreach ($data['data']['pilihan'] as $k => $choice) :?>
+                                                        <?php $pilihan .= '
+                                                            <div class="mb-3">
+                                                                <label>
+                                                                    <input type="radio" data-id="'.$index.'|'.$i.'"  name="radio-'.$index.'['.$i.']" value="'.$choice.'"> 
+                                                                    '.$choice.'
+                                                                </label>
+                                                            </div>' ?>
+                                                    <?php endforeach;?>
+                                                    <?php $item = $soal.$pilihan;?>
+                                                <?php endif;?>
+                                            <?php elseif($data['item'] == "petunjuk") :
+                                                    if($data['penulisan'] == "RTL"){
+                                                        $item = '<div dir="rtl" class="mb-3">'.$data['data'].'</div>';
+                                                    } else {
+                                                        $item = '<div dir="ltr" class="mb-3">'.$data['data'].'</div>';
+                                                    }?>
+                                            <?php elseif($data['item'] == "audio") :
+                                                $item = '<center><audio controls controlsList="nodownload"><source src="'.$link['value'].'/assets/myaudio/'.$data['data'].'.mp3" type="audio/mpeg"></audio></center>';
+                                            ?>
+                                            <?php endif;?>
+                                            <div class="shadow card mb-3 soal">
+                                                <div class="card-body" id="soal-<?= $i?>">
+                                                    
+                                                    <?= $item?>
+                                
+                                                </div>
+                                            </div>
+                                        <?php endforeach;?>
+
+                                        <div class="mb-3">
+                                            <!-- jika index = 1, tampilkan tombol back else hanya tampilkan tombol next  -->
+                                            <?php if($index == $jumlah_sesi && $jumlah_sesi != 1) :?>
+                                                <div class="d-flex justify-content-end">
+                                                    <button type="button" class="btn btn-md btn-primary btnSimpan" data-id="sesi-<?= $index + 1?>">
+                                                        <svg width="20" height="20">
+                                                            <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-device-floppy" />
+                                                        </svg>
+                                                        Simpan
+                                                    </button>
+                                                </div>
+                                            <?php elseif($index == $jumlah_sesi && $jumlah_sesi == 1) :?>
+                                                <div class="d-flex justify-content-between">
+                                                    <button type="button" class="btn btn-md btn-success btnBack" data-id="sesi-<?= $index - 1?>">
+                                                        <svg width="20" height="20">
+                                                            <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-arrow-narrow-left" />
+                                                        </svg> 
+                                                        Back</button>
+                                                    <button type="button" class="btn btn-md btn-primary btnSimpan" data-id="sesi-<?= $index + 1?>">
+                                                        <svg width="20" height="20">
+                                                            <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-device-floppy" />
+                                                        </svg>
+                                                        Simpan
+                                                    </button>
+                                                </div>
+                                            <?php elseif($index == 1) :?>
+                                                <div class="d-flex justify-content-between">
+                                                    <button type="button" class="btn btn-md btn-success btnBack" data-id="sesi-<?= $index - 1?>">
+                                                        <svg width="20" height="20">
+                                                            <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-arrow-narrow-left" />
+                                                        </svg> 
+                                                        Back</button>
+                                                    <button type="button" class="btn btn-md btn-success btnNext" data-id="sesi-<?= $index + 1?>">
+                                                        Next
+                                                        <svg width="20" height="20">
+                                                            <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-arrow-narrow-right" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            <?php else :?>
+                                                <div class="d-flex justify-content-end">
+                                                    <button type="button" class="btn btn-md btn-success btnNext" data-id="sesi-<?= $index + 1?>">
+                                                        Next
+                                                        <svg width="20" height="20">
+                                                            <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-arrow-narrow-right" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            <?php endif;?>
+                                        </div>
+
+                                    </div>
+                                <?php 
+                                    $index++;
+                                    endforeach;?>
+
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+                <?php $this->load->view("_partials/footer-bar")?>
+            </div>
+        </div>
+    </div>
+
+    <?php  
+        if(isset($js)) :
+            foreach ($js as $i => $js) :?>
+                <script src="<?= base_url()?>assets/myjs/<?= $js?>"></script>
+                <?php 
+            endforeach;
+        endif;    
+    ?>
+
 <?php $this->load->view("_partials/footer")?>
 
 <script>
-    // $("#soalListening").hide();
-    // $("#soalStructure").hide();
-    // $("#soalReading").hide();
+    $("#hidePassword").hide();
+    
+    $("#showPassword").click(function(){
+        $("input[name='password']").prop('type', 'text');
+        $("#showPassword").hide();
+        $("#hidePassword").show()
+    })
+    
+    $("#hidePassword").click(function(){
+        $("input[name='password']").prop('type', 'password');
+        $("#showPassword").show();
+        $("#hidePassword").hide()
+    })
 
     $("select[name='fontSize']").change(function(){
         let size = $(this).val();
@@ -358,188 +337,199 @@
         $(this).val(size)
     })
 
-    $('input:radio.soal_listening').click(function () {
-        let value = $(this).val();
+    $(".btnSignIn").click(function(){
+        let id_tes = $("input[name='id_tes']").val();
+        let password = $("input[name='password']").val();
+
+        $.ajax({
+            url: "<?= base_url()?>soal/password_check",
+            method: "POST",
+            data: {id:id_tes, password:password},
+            success: function(result){
+                if(result){
+                    Swal.fire({
+                        icon: 'success',
+                        title: '',
+                        text: 'Berhasil masuk',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $("#login").hide();
+                    $("#soal_tes").show();
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Password yang Anda masukkan salah'
+                    })
+                }
+            }
+        })
+    })
+
+    var click = false;
+    $(".btnNext").click(function(){
         let id = $(this).data("id");
-        $("#cekListening"+id).val(value)
-    });
 
-    $('input:radio.soal_structure').click(function () {
-        let value = $(this).val();
-        let id = $(this).data("id");
-        $("#cekStructure"+id).val(value)
-    });
+        if(id == "sesi-1"){
 
-    $('input:radio.soal_reading').click(function () {
-        let value = $(this).val();
-        let id = $(this).data("id");
-        $("#cekReading"+id).val(value)
-    });
+            let form = "#sesi-0";
 
-    var click = 0;
+            let email = $(form+" [name='email']").val();
+            let id_tes = "<?= $id?>"
 
-    $("#dataDiri .btnNext").click(function(){
-        let form = "#dataDiri";
+            let eror = required(form);
+            
+            if(eror == 1){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Lengkapi data terlebih dahulu',
+                })
+            } else {
+                let table = "<?= $table?>";
+                
+                $.ajax({
+                    url: "<?= base_url()?>soal/email_check/"+table,
+                    data: {email:email, id:id_tes},
+                    dataType: "JSON",
+                    method: "POST",
+                    success: function(result){
+                        if(result) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Maaf email Anda telah digunakan',
+                            })
+                        } else {
+                            if(click == false) {
+                                Swal.fire({
+                                    icon: 'question',
+                                    html: 'Mulai mengerjakan soal?',
+                                    showCloseButton: true,
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Ya',
+                                    cancelButtonText: 'Tidak'
+                                }).then(function (result) {
+                                    if (result.value) {
+                                        // mulai hitung waktu
+                                        if(click == false){
+                                            sec = <?= $tes['waktu']?> * 60,
+                                            countDiv = document.getElementById("waktu"),
+                                            secpass,
+                                            countDown = setInterval(function () {
+                                                'use strict';
+                                                secpass();
+                                            }, 1000);
+                                        }
 
-        let email = $(form+" input[name='email']").val();
-        let nama = $(form+" input[name='nama']").val();
-        let no_wa = $(form+" input[name='no_wa']").val();
-        let t4_lahir = $(form+"  input[name='t4_lahir']").val();
-        let tgl_lahir = $(form+"  input[name='tgl_lahir']").val();
-        let alamat = $(form+"  textarea[name='alamat']").val();
-        let id = "<?= $id?>"
-        
-        if(email == "" || nama == "" || no_wa == "" || t4_lahir == "" || tgl_lahir == "" || alamat == ""){
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Lengkapi data terlebih dahulu',
-            })
-        } else {
-            $.ajax({
-                url: "<?= base_url()?>soal/email_check",
-                data: {email:email, id:id},
-                dataType: "JSON",
-                method: "POST",
-                success: function(result){
-                    if(result) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Maaf email Anda telah digunakan',
-                        })
-                    } else {
-                        click++;
-                        $("#soalListening").show();
-                        $("#soalStructure").hide();
-                        $("#soalReading").hide();
-                        $("#dataDiri").hide()
+                                        click = true;
+                                        // hide all id 
+                                        $("div[id^='sesi-'").hide();
+                                        // show sesi 
+                                        $("#"+id).show();
+                                        
+                                        // scroll to top 
+                                        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                                            $([document.documentElement, document.body]).animate({
+                                                scrollTop: $("#elementtoScrollToID").offset().top
+                                            }, 1000);
+                                        }
 
-                        if(click == 1){
-                            sec = <?= $tes['waktu']?> * 60,
-                            countDiv = document.getElementById("waktu"),
-                            secpass,
-                            countDown = setInterval(function () {
-                                'use strict';
-                                secpass();
-                            }, 1000);
+                                    } else {
+                                        return;
+                                    }
+                                })
+                            } else {
+                                // hide all id 
+                                $("div[id^='sesi-'").hide();
+                                // show sesi 
+                                $("#"+id).show();
+                                
+                                // scroll to top 
+                                if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                                    $([document.documentElement, document.body]).animate({
+                                        scrollTop: $("#elementtoScrollToID").offset().top
+                                    }, 1000);
+                                }
+                            }
                         }
+                    }
+                })
+            }
+            
+        } else {
+
+            jumlah_soal = $("[name='"+id+"']").val();
+
+            sesi = id.replace("sesi-", "");
+            sesi = parseInt(sesi-1);
+
+            if($('#sesi-'+sesi+' input:radio:checked').length != jumlah_soal){
+            
+                $.each($("#sesi-"+sesi+" [name='jawaban_sesi_"+sesi+"[]']"), function(){
+                    index = $(this).data("id");
+                    $("#sesi-"+sesi+" #"+index).removeClass("list-group-item-danger")
+
+                    if($(this).val() == "null"){
+                        $("#sesi-"+sesi+" #"+index).addClass("list-group-item-danger")
+                    }
+                })
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Anda belum menyelesaikan soal pada sesi ini',
+                })
+            } else {
+                Swal.fire({
+                    icon: 'question',
+                    html: 'Yakin akan pindah ke sesi selanjutnya?<br><small style="font-size: 0.70em" class="form-text text-danger">Anda tidak akan bisa kembali ke sesi ini</small>',
+                    showCloseButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya',
+                    cancelButtonText: 'Tidak'
+                }).then(function (result) {
+                    if (result.value) {
                         
+                        // hide all id 
+                        $("div[id^='sesi-'").hide();
+                        // show sesi 
+                        $("#"+id).show();
+                        
+                        // scroll to top 
                         if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
                             $([document.documentElement, document.body]).animate({
                                 scrollTop: $("#elementtoScrollToID").offset().top
                             }, 1000);
                         }
                     }
-                }
-            })
+                })
+            }
         }
     })
+    
+    $(".btnBack").click(function(){
+        let id = $(this).data("id");
+        $("div[id^='sesi-'").hide();
+        $("#"+id).show();
+    })
 
-    $("#soalListening .btnBack").click(function(){
-        $("#soalListening").hide();
-        $("#soalStructure").hide();
-        $("#soalReading").hide();
-        $("#dataDiri").show()
+    $(".btnSimpan").click(function(){
+        let id = $(this).data("id");
+        jumlah_soal = $("[name='"+id+"']").val();
+
+        sesi = id.replace("sesi-", "");
+        sesi = parseInt(sesi-1);
+
+        if($('#sesi-'+sesi+' input:radio:checked').length != jumlah_soal){
         
-        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-            $([document.documentElement, document.body]).animate({
-                scrollTop: $("#elementtoScrollToID").offset().top
-            }, 1000);
-        }
-    })
-
-    $("#soalListening .btnNext").click(function(){
-        if($('input:radio.soal_listening:checked').length != <?= $jumlah_soal['listening']?>){
-            
-            $.each($("input[name='cekListening[]']"), function(){
-                id = $(this).data("id");
-                $("#soalListening"+id).removeClass("list-group-item-danger")
+            $.each($("#sesi-"+sesi+" [name='jawaban_sesi_"+sesi+"[]']"), function(){
+                index = $(this).data("id");
+                $("#sesi-"+sesi+" #"+index).removeClass("list-group-item-danger")
 
                 if($(this).val() == "null"){
-                    $("#soalListening"+id).addClass("list-group-item-danger")
-                }
-            })
-
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Anda belum menyelesaikan soal pada sesi ini',
-            })
-        } else {
-            Swal.fire({
-                icon: 'question',
-                html: 'Yakin akan pindah ke sesi soal selanjutnya?<br><small style="font-size: 0.70em" class="form-text text-danger">Anda tidak akan bisa kembali ke sesi ini</small>',
-                showCloseButton: true,
-                showCancelButton: true,
-                confirmButtonText: 'Ya',
-                cancelButtonText: 'Tidak'
-            }).then(function (result) {
-                if (result.value) {
-                    $("#soalListening").hide();
-                    $("#soalStructure").show();
-                    $("#soalReading").hide();
-                    
-                    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-                        $([document.documentElement, document.body]).animate({
-                            scrollTop: $("#elementtoScrollToID").offset().top
-                        }, 1000);
-                    }
-                }
-            })
-        }
-    })
-
-    $("#soalStructure .btnNext").click(function(){
-        if($('input:radio.soal_structure:checked').length != <?= $jumlah_soal['structure']?>){
-            
-            $.each($("input[name='cekStructure[]']"), function(){
-                id = $(this).data("id");
-                $("#soalStructure"+id).removeClass("list-group-item-danger")
-
-                if($(this).val() == "null"){
-                    $("#soalStructure"+id).addClass("list-group-item-danger")
-                }
-            })
-
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Anda belum menyelesaikan soal pada sesi ini',
-            })
-        } else {
-            Swal.fire({
-                icon: 'question',
-                html: 'Yakin akan pindah ke sesi soal selanjutnya?<br><small style="font-size: 0.70em" class="form-text text-danger">Anda tidak akan bisa kembali ke sesi ini</small>',
-                showCloseButton: true,
-                showCancelButton: true,
-                confirmButtonText: 'Ya',
-                cancelButtonText: 'Tidak'
-            }).then(function (result) {
-                if (result.value) {
-                    $("#soalListening").hide();
-                    $("#soalStructure").hide();
-                    $("#soalReading").show();
-                    
-                    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-                        $([document.documentElement, document.body]).animate({
-                            scrollTop: $("#elementtoScrollToID").offset().top
-                        }, 1000);
-                    }
-                }
-            })
-        }
-    })
-
-    $("#soalReading .btnNext").click(function(){
-        if($('input:radio.soal_reading:checked').length != <?= $jumlah_soal['reading']?>){
-            
-            $.each($("input[name='cekReading[]']"), function(){
-                id = $(this).data("id");
-                $("#soalReading"+id).removeClass("list-group-item-danger")
-
-                if($(this).val() == "null"){
-                    $("#soalReading"+id).addClass("list-group-item-danger")
+                    $("#sesi-"+sesi+" #"+index).addClass("list-group-item-danger")
                 }
             })
 
@@ -558,31 +548,14 @@
                 cancelButtonText: 'Tidak'
             }).then(function (result) {
                 if (result.value) {
-                    formSubmitting = true;
+                    $(".btnSimpan").html("Proses...");
+                    $(".btnSimpan").prop("disabled", true);
+                    $(".btnBack").prop("disabled", true);
                     $("#formSoal").submit()
                 }
             })
         }
     })
-
-    $.fn.inputFilter = function(inputFilter) {
-        return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
-        if (inputFilter(this.value)) {
-            this.oldValue = this.value;
-            this.oldSelectionStart = this.selectionStart;
-            this.oldSelectionEnd = this.selectionEnd;
-        } else if (this.hasOwnProperty("oldValue")) {
-            this.value = this.oldValue;
-            this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
-        } else {
-            this.value = "";
-        }
-        });
-    };
-
-    $("#no_wa").inputFilter(function(value) {
-        return /^\d*$/.test(value);    // Allow digits only, using a RegExp
-    });
 
     function secpass() {
         'use strict';
@@ -606,24 +579,14 @@
             sec = sec - 1;
         } else {
             clearInterval(countDown);
-            // formSubmitting = true;
-            // $("#formSoal").submit();
-            // countDiv.innerHTML = 'countdown done';
+            $("#formSoal").submit();
         }
     }
 
-    var formSubmitting = false;
-    window.onload = function() {
-        window.addEventListener("beforeunload", function (e) {
-            if (formSubmitting) {
-                return undefined;
-            }
-
-            var confirmationMessage = 'It looks like you have been editing something. '
-                                    + 'If you leave before saving, your changes will be lost.';
-
-            (e || window.event).returnValue = confirmationMessage; //Gecko + IE
-            return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
-        });
-    };
+    $('input:radio').click(function () {
+        let id = $(this).data("id");
+        id = id.split("|");
+        let value = $(this).val();
+        $("#jawaban_sesi_"+id[0]+""+id[1]).val(value);
+    });
 </script>
