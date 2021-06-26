@@ -1,11 +1,11 @@
 <?php $this->load->view("_partials/header")?>
     <div class="page page-center" id="login">
         <div class="container-tight py-4">
-            <div class="text-center mb-4">
-                <a href="javascript:void()"><img src="<?= $link['value']?>/assets/img/logo.png" height="80" alt=""></a>
-            </div>
             <div class="card">
                 <div class="card-body">
+                    <div class="text-center mb-4">
+                        <a href="javascript:void()"><img src="<?= $link['value']?>/assets/img/logo.png" height="80" alt=""></a>
+                    </div>
                     <h2 class="card-title text-center mb-4"><?= $title?></h2>
                     <?php if( $this->session->flashdata('pesan') ) : ?>
                         <?= $this->session->flashdata('pesan')?>
@@ -57,50 +57,7 @@
                                             <h3 class="card-title">Data Diri</h3>
                                         </div>
                                         <div class="card-body">
-                                            <?php foreach ($form as $form) :?>
-                                                <div class="form-floating mb-3">
-                                                    <?php if($form['type'] == "text") :?>
-                                                        <input type="text" name="<?= $form['name']?>" class="form-control <?= $form['format']?> <?= $form['required']?>">
-                                                    <?php elseif($form['type'] == "date") :?>
-                                                        <input type="date" name="<?= $form['name']?>" class="form-control <?= $form['required']?>">
-                                                    <?php elseif($form['type'] == "textarea") :?>
-                                                        <textarea name="<?= $form['name']?>" class="form-control <?= $form['required']?>" data-bs-toggle="autosize"></textarea>
-                                                    <?php endif;?>
-                                                    <label><?= $form['label']?></label>
-                                                    <?php if($form['help'] != ""):?>
-                                                        <small id="emailHelp" class="form-text text-danger"><?= $form['help']?></small>
-                                                    <?php endif;?>
-                                                </div>
-                                            <?php endforeach;?>
-                                            <!-- <div class="form-floating mb-3">
-                                                <input type="text" name="email" class="form-control required">
-                                                <label>Alamat Email</label>
-                                            </div>
-                                            <div class="form-floating mb-3">
-                                                <input type="text" name="nama" class="form-control required">
-                                                <label>Nama Lengkap</label>
-                                            </div>
-                                            <div class="form-floating mb-3">
-                                                <input type="text" name="no_wa" class="form-control required">
-                                                <label>No Whatsapp</label>
-                                            </div>
-                                            <div class="form-floating mb-3">
-                                                <input type="text" name="t4_lahir" class="form-control required">
-                                                <label>Tempat Lahir</label>
-                                            </div>
-                                            <div class="form-floating mb-3">
-                                                <input type="date" name="tgl_lahir" class="form-control required">
-                                                <label>Tgl Lahir</label>
-                                            </div>
-                                            <div class="form-floating mb-3">
-                                                <textarea name="alamat" class="form-control required" data-bs-toggle="autosize"></textarea>
-                                                <label for="" class="col-form-label">Alamat</label>
-                                            </div>
-                                            <div class="form-floating mb-3">
-                                                <textarea name="alamat_pengiriman" class="form-control" data-bs-toggle="autosize"></textarea>
-                                                <label for="" class="col-form-label">Alamat Pengiriman</label>
-                                                <small id="emailHelp" class="form-text text-danger">Form Alamat pengiriman diisi jika memesan sertifikat</small>
-                                            </div> -->
+                                            <?= $form?>
                                         </div>
                                     </div>
                                     <div class="mb-3">

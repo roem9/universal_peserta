@@ -20,7 +20,7 @@ class Soal extends CI_Controller {
         $data['link'] = $this->Main_model->get_one("config", ['field' => "web admin"]);
         
         if($tes){
-            $data['cek'] = $this->Main_model->get_one("item_soal", ["id_item" => 7]);
+            // $data['cek'] = $this->Main_model->get_one("item_soal", ["id_item" => 7]);
             $data['id'] = $id_tes;
 
             $soal = $this->Main_model->get_one("soal", ["id_soal" => $tes['id_soal']]);
@@ -28,93 +28,56 @@ class Soal extends CI_Controller {
 
             if($soal['tipe_soal'] == "TOAFL" || $soal['tipe_soal'] == "TOEFL"){
                 $data['table'] = "peserta_toefl";
-                $data['form'] = [
-                    [
-                        "name" => "nama",
-                        "label" => "Nama lengkap",
-                        "type" => "text",
-                        "required" => "required",
-                        "check" => "",
-                        "format" => "",
-                        "help" => ""
-                    ],
-                    [
-                        "name" => "email",
-                        "label" => "Email",
-                        "type" => "text",
-                        "required" => "required",
-                        "check" => "check",
-                        "format" => "",
-                        "help" => ""
-                    ],
-                    [
-                        "name" => "no_wa",
-                        "label" => "No. Whatsapp",
-                        "type" => "text",
-                        "required" => "required",
-                        "check" => "",
-                        "format" => "number",
-                        "help" => ""
-                    ],
-                    [
-                        "name" => "t4_lahir",
-                        "label" => "Kota Lahir",
-                        "type" => "text",
-                        "required" => "required",
-                        "check" => "",
-                        "format" => "",
-                        "help" => ""
-                    ],
-                    [
-                        "name" => "tgl_lahir",
-                        "label" => "Tgl Lahir",
-                        "type" => "date",
-                        "required" => "required",
-                        "check" => "",
-                        "format" => "",
-                        "help" => ""
-                    ],
-                    [
-                        "name" => "alamat",
-                        "label" => "Alamat",
-                        "type" => "textarea",
-                        "required" => "required",
-                        "check" => "",
-                        "format" => "",
-                        "help" => ""
-                    ],
-                    [
-                        "name" => "alamat_pengiriman",
-                        "label" => "Alamat Pengiriman",
-                        "type" => "textarea",
-                        "required" => "required",
-                        "check" => "",
-                        "format" => "",
-                        "help" => "Form Alamat pengiriman diisi jika memesan sertifikat"
-                    ],
-                ];
+                $data['form'] = "
+                    <div class=\"form-floating mb-3\">
+                        <input type=\"text\" name=\"email\" class=\"form form-control required\">
+                        <label for=\"email\">Alamat Email</label>
+                    </div>
+                    <div class=\"form-floating mb-3\">
+                        <input type=\"text\" name=\"nama\" class=\"form form-control required\">
+                        <label for=\"nama\">Nama Lengkap</label>
+                    </div>
+                    <div class=\"form-floating mb-3\">
+                        <select name=\"jk\" class=\"form form-control required\">
+                            <option value=\"\">Pilih Gender</option>
+                            <option value=\"Male\">Male</option>
+                            <option value=\"Female\">Female</option>
+                        </select>
+                        <label for=\"jk\">Gender</label>
+                    </div>
+                    <div class=\"form-floating mb-3\">
+                        <input type=\"text\" name=\"no_wa\" class=\"form form-control required number\">
+                        <label for=\"no_wa\">No Whatsapp</label>
+                    </div>
+                    <div class=\"form-floating mb-3\">
+                        <input type=\"text\" name=\"t4_lahir\" class=\"form form-control required\">
+                        <label for=\"t4_lahir\">Kota Lahir</label>
+                    </div>
+                    <div class=\"form-floating mb-3\">
+                        <input type=\"date\" name=\"tgl_lahir\" class=\"form form-control required\">
+                        <label for=\"tgl_lahir\">Tgl Lahir</label>
+                    </div>
+                    <div class=\"form-floating mb-3\">
+                        <textarea name=\"alamat\" class=\"form form-control required\"></textarea>
+                        <label for=\"alamat\">Alamat</label>
+                    </div>
+                    <div class=\"form-floating mb-3\">
+                        <textarea name=\"alamat_pengiriman\" class=\"form form-control\"></textarea>
+                        <label for=\"alamat_pengiriman\">Alamat Lengkap Pengiriman Sertifikat</label>
+                        <small class=\"form-text text-danger\">Form Alamat pengiriman diisi jika memesan sertifikat</small>
+                    </div>
+                ";
             } else {
                 $data['table'] = "peserta";
-                $data['form'] = [
-                    [
-                        "name" => "nama",
-                        "label" => "Nama lengkap",
-                        "type" => "text",
-                        "required" => "required",
-                        "check" => "check",
-                        "format" => "",
-                        "help" => ""
-                    ],
-                    [
-                        "name" => "email",
-                        "label" => "Email",
-                        "type" => "text",
-                        "required" => "required",
-                        "check" => "",
-                        "format" => "",
-                        "help" => ""
-                    ],
-                ];
+                $data['form'] = "
+                    <div class=\"form-floating mb-3\">
+                        <input type=\"text\" name=\"email\" class=\"form form-control required\">
+                        <label for=\"email\">Alamat Email</label>
+                    </div>
+                    <div class=\"form-floating mb-3\">
+                        <input type=\"text\" name=\"nama\" class=\"form form-control required\">
+                        <label for=\"nama\">Nama Lengkap</label>
+                    </div>";
             }
 
             $data['title'] = $tes['nama_tes'];
@@ -255,6 +218,7 @@ class Soal extends CI_Controller {
             "alamat_pengiriman" => $this->input->post("alamat_pengiriman"),
             "no_wa" => $this->input->post("no_wa"),
             "email" => $this->input->post("email"),
+            "jk" => $this->input->post("jk"),
             "nilai_listening" => $nilai_listening,
             "nilai_structure" => $nilai_structure,
             "nilai_reading" => $nilai_reading,
@@ -273,6 +237,7 @@ class Soal extends CI_Controller {
             '$alamat_pengiriman' => $this->input->post("alamat_pengiriman"),
             '$no_wa' => $this->input->post("no_wa"),
             '$email' => $this->input->post("email"),
+            '$jk' => $this->input->post("jk"),
             '$nilai_listening' => poin("Listening", $nilai_listening),
             '$nilai_structure' => poin("Structure", $nilai_structure),
             '$nilai_reading' =>poin("Reading", $nilai_reading),
@@ -353,16 +318,6 @@ class Soal extends CI_Controller {
         $this->session->set_flashdata('pesan', $msg);
 
         redirect(base_url("soal/id/".$id_tes), $data);
-    }
-
-    public function keterangan($nilai) {
-        // if($nilai >= 401 && $nilai <= 450) $nilai = "مقبول";
-        if($nilai <= 450) $nilai = "مقبول";
-        else if($nilai >= 451 && $nilai <= 500) $nilai = "جيد";
-        else if($nilai >= 501 && $nilai <= 600) $nilai = "جيد جدا";
-        else if($nilai >= 601 && $nilai <= 680) $nilai = "ممتاز";
-
-        return $nilai;
     }
 
     public function tgl_indo($tgl){

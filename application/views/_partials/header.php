@@ -13,7 +13,10 @@
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+
+    <link rel="icon" href="<?= $link['value']?>/assets/img/logo.png?t=<?= time()?>" type="image/icon type">
     <title><?= $title?></title>
+
     <!-- CSS files -->
     <link href="<?= base_url()?>assets/css/tabler.min.css" rel="stylesheet"/>
     <link href="<?= base_url()?>assets/css/tabler-flags.min.css" rel="stylesheet"/>
@@ -24,4 +27,4 @@
     <script src="<?= base_url()?>assets/jquery/sweetalert2@9.js"></script>
   </head>
   <!-- <body class="antialiased" style="background-color: #265D5A"> -->
-  <body class="antialiased" style="background-color: #D3DCE3">
+  <body class="antialiased" style="background-color: #017290">

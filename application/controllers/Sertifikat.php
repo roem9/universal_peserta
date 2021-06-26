@@ -31,22 +31,9 @@ class Sertifikat extends CI_Controller {
 
             $skor = ((poin("Listening", $peserta['nilai_listening']) + poin("Structure", $peserta['nilai_structure']) + poin("Reading", $peserta['nilai_reading'])) * 10) / 3;
             $peserta['skor'] = $skor;
-            
-            if($skor >= 210 && $skor <= 300){
-                $peserta['nilai'] = "ضعيف جدا";
-            } else if($skor >= 301 && $skor <= 400){
-                $peserta['nilai'] = "ضعيف";
-            } else if($skor >= 401 && $skor <= 450){
-                $peserta['nilai'] = "مقبول";
-            } else if($skor >= 451 && $skor <= 500){
-                $peserta['nilai'] = "جيد";
-            } else if($skor >= 501 && $skor <= 600){
-                $peserta['nilai'] = "جيد جدا";
-            } else if($skor >= 601 && $skor <= 680){
-                $peserta['nilai'] = "ممتاز";
-            }
 
-            $peserta['no_doc'] = "{$peserta['no_doc']}/TOAFL/ACP/{$peserta['bulan']}/{$peserta['tahun']}";
+            // $peserta['no_doc'] = "{$peserta['no_doc']}/TOAFL/ACP/{$peserta['bulan']}/{$peserta['tahun']}";
+            $peserta['no_doc'] = "{$peserta['no_doc']}/{$peserta['bulan']}/{$peserta['tahun']}";
         }
 
         // $this->load->view("pages/layout/header-sertifikat", $peserta);
