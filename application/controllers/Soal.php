@@ -137,9 +137,9 @@ class Soal extends CI_Controller {
                         
                         $number++;
     
-                    } else if($soal['item'] == "petunjuk" || $soal['item'] == "audio"){
+                    } else if($soal['item'] == "petunjuk" || $soal['item'] == "gambar"){
                         $data['sesi'][$i]['soal'][$j] = $soal;
-                    } else if($soal['audio']) {
+                    } else if($soal['item'] == "audio") {
                         $data['sesi'][$i]['soal'][$j] = $soal;
                         $audio = $this->Main_model->get_one("audio", ["id_audio" => $soal['data']]);
                         $data['sesi'][$i]['soal'][$j]['file'] = $audio['nama_file'];
@@ -210,8 +210,7 @@ class Soal extends CI_Controller {
                 $txt_soal = json_decode($string, true );
 
                 $sub_soal = $txt_soal['jawaban'];
-
-                if($sub_soal == $jawaban[$j]){
+                if(trim(preg_replace('/\s+/', ' ', strtolower($sub_soal))) == trim(preg_replace('/\s+/', ' ', strtolower($jawaban[$j])))){
                     $status = "benar";
                     $benar++;
                 } else {
@@ -301,7 +300,7 @@ class Soal extends CI_Controller {
                 $txt_soal = json_decode($string, true );
 
                 $sub_soal = $txt_soal['jawaban'];
-                if($sub_soal == $jawaban[$j]){
+                if(trim(preg_replace('/\s+/', ' ', strtolower($sub_soal))) == trim(preg_replace('/\s+/', ' ', strtolower($jawaban[$j])))){
                     $status = "benar";
                     $benar++;
                 } else {
@@ -394,7 +393,7 @@ class Soal extends CI_Controller {
                 $txt_soal = json_decode($string, true );
 
                 $sub_soal = $txt_soal['jawaban'];
-                if($sub_soal == $jawaban[$j]){
+                if(trim(preg_replace('/\s+/', ' ', strtolower($sub_soal))) == trim(preg_replace('/\s+/', ' ', strtolower($jawaban[$j])))){
                     $status = "benar";
                     $benar++;
                 } else {
