@@ -47,6 +47,8 @@
                         <div class="row row-cards FieldContainer" data-masonry='{"percentPosition": true }'>
                             <?php if($soal['tipe_soal'] == "TOAFL" || $soal['tipe_soal'] == "TOEFL") :?>
                                 <form action="<?= base_url()?>soal/add_jawaban_toefl" method="post" id="formSoal">
+                            <?php elseif($soal['tipe_soal'] == "IELTS") :?>
+                                <form action="<?= base_url()?>soal/add_jawaban_ielts" method="post" id="formSoal">
                             <?php else :?>
                                 <form action="<?= base_url()?>soal/add_jawaban" method="post" id="formSoal">
                             <?php endif;?>
@@ -79,7 +81,7 @@
                                     <div id="sesi-<?=$index?>" style="display: none">
 
                                         <div class="form-floating mb-3">
-                                            <select name="fontSize" class="form-control required">
+                                            <select name="fontSize" class="form-control">
                                                 <option value="">Pilih Ukuran Tulisan</option>
                                                 <option value="">Default</option>
                                                 <option value="20px">20px</option>
@@ -146,7 +148,7 @@
                                             <?php if($data['item'] == "soal") :?>
                                                 <?php if($data['penulisan'] == "RTL") :?>
                                                     <?php $soal = '<div dir="rtl" class="mb-3">'.$data['data']['soal'].'</div>' ?>
-                                                    <input type="hidden" name="jawaban_sesi_<?= $index?>[]" data-id="soal-<?= $i?>" id="jawaban_sesi_<?= $index?><?= $i?>" value="null">
+                                                    <input type="hidden" name="jawaban_sesi_<?= $index?>[]" class="required" data-id="soal-<?= $i?>" id="jawaban_sesi_<?= $index?><?= $i?>" value="null">
                                                     <?php $pilihan = "";?>
                                                     <?php foreach ($data['data']['pilihan'] as $k => $choice) :?>
                                                         <?php $pilihan .= '
@@ -164,7 +166,7 @@
                                                     <?php $item = $soal.$pilihan;?>
                                                 <?php else :?>
                                                     <?php $soal = '<div class="mb-3">'.$data['data']['soal'].'</div>' ?>
-                                                    <input type="hidden" name="jawaban_sesi_<?= $index?>[]" data-id="soal-<?= $i?>" id="jawaban_sesi_<?= $index?><?= $i?>" value="null">
+                                                    <input type="hidden" name="jawaban_sesi_<?= $index?>[]" class="required" data-id="soal-<?= $i?>" id="jawaban_sesi_<?= $index?><?= $i?>" value="null">
                                                     <?php $pilihan = "";?>
                                                     <?php foreach ($data['data']['pilihan'] as $k => $choice) :?>
                                                         <?php $pilihan .= '
@@ -176,6 +178,26 @@
                                                             </div>' ?>
                                                     <?php endforeach;?>
                                                     <?php $item = $soal.$pilihan;?>
+                                                <?php endif;?>
+                                            <?php elseif($data['item'] == "soal esai") :?>
+                                                <?php if($data['penulisan'] == "RTL") :?>
+                                                    <?php $soal = '<div dir="rtl" class="mb-3">'.$data['data']['soal'].'</div>' ?>
+                                                    <input type="hidden" name="jawaban_sesi_<?= $index?>[]" class="required" data-id="soal-<?= $i?>" id="jawaban_sesi_<?= $index?><?= $i?>" value="null">
+                                                    <?php $jawaban = '
+                                                                    <div class="form-floating mb-3">
+                                                                        <textarea name="jawaban" class="form form-control" data-id="'.$index.'|'.$i.'"></textarea>
+                                                                        <label for="jawaban">Answer</label>
+                                                                    </div>';?>
+                                                    <?php $item = $soal.$jawaban;?>
+                                                <?php else :?>
+                                                    <?php $soal = '<div class="mb-3">'.$data['data']['soal'].'</div>' ?>
+                                                    <input type="hidden" name="jawaban_sesi_<?= $index?>[]" class="required" data-id="soal-<?= $i?>" id="jawaban_sesi_<?= $index?><?= $i?>" value="null">
+                                                    <?php $jawaban = '
+                                                                    <div class="form-floating mb-3">
+                                                                        <textarea name="jawaban" class="form form-control" data-id="'.$index.'|'.$i.'"></textarea>
+                                                                        <label for="jawaban">Answer</label>
+                                                                    </div>';?>
+                                                    <?php $item = $soal.$jawaban;?>
                                                 <?php endif;?>
                                             <?php elseif($data['item'] == "petunjuk") :
                                                     if($data['penulisan'] == "RTL"){
@@ -416,13 +438,19 @@
             }
             
         } else {
-
             jumlah_soal = $("[name='"+id+"']").val();
 
             sesi = id.replace("sesi-", "");
             sesi = parseInt(sesi-1);
 
-            if($('#sesi-'+sesi+' input:radio:checked').length != jumlah_soal){
+            let eror = 0;
+            $.each($("#sesi-"+sesi+" .required"), function(){
+                if($(this).val() == "null") {
+                    eror = 1
+                }
+            })
+
+            if(eror == 1){
             
                 $.each($("#sesi-"+sesi+" [name='jawaban_sesi_"+sesi+"[]']"), function(){
                     index = $(this).data("id");
@@ -479,8 +507,14 @@
         sesi = id.replace("sesi-", "");
         sesi = parseInt(sesi-1);
 
-        if($('#sesi-'+sesi+' input:radio:checked').length != jumlah_soal){
-        
+        let eror = 0;
+        $.each($("#sesi-"+sesi+" .required"), function(){
+            if($(this).val() == "null") {
+                eror = 1
+            }
+        })
+
+        if(eror == 1){
             $.each($("#sesi-"+sesi+" [name='jawaban_sesi_"+sesi+"[]']"), function(){
                 index = $(this).data("id");
                 $("#sesi-"+sesi+" #"+index).removeClass("list-group-item-danger")
@@ -545,5 +579,13 @@
         id = id.split("|");
         let value = $(this).val();
         $("#jawaban_sesi_"+id[0]+""+id[1]).val(value);
+    });
+
+    $('[name="jawaban"]').on("keyup change", function () {
+        let id = $(this).data("id");
+        id = id.split("|");
+        let value = $(this).val();
+        if(value != "") $("#jawaban_sesi_"+id[0]+""+id[1]).val(value);
+        else $("#jawaban_sesi_"+id[0]+""+id[1]).val("null");
     });
 </script>

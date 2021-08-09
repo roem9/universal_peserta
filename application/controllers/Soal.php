@@ -26,8 +26,10 @@ class Soal extends CI_Controller {
             $soal = $this->Main_model->get_one("soal", ["id_soal" => $tes['id_soal']]);
             $sesi = $this->Main_model->get_all("sesi_soal", ["id_soal" => $soal['id_soal']]);
 
-            if($soal['tipe_soal'] == "TOAFL" || $soal['tipe_soal'] == "TOEFL"){
-                $data['table'] = "peserta_toefl";
+            if($soal['tipe_soal'] == "TOAFL" || $soal['tipe_soal'] == "TOEFL" || $soal['tipe_soal'] == "IELTS"){
+                if($soal['tipe_soal'] == "IELTS") $data['table'] = "peserta_ielts";
+                else $data['table'] = "peserta_toefl";
+
                 $data['form'] = "
                     <div class=\"form-floating mb-3\">
                         <input type=\"text\" name=\"email\" class=\"form form-control required\">
@@ -112,6 +114,29 @@ class Soal extends CI_Controller {
                         
                         $number++;
 
+                    } else if($soal['item'] == "soal esai"){
+                        // from json to array 
+                        // $txt_soal = json_decode( preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $soal['data']), true );
+                        $string = trim(preg_replace('/\s+/', ' ', $soal['data']));
+                        // $txt_soal = json_decode( preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $soal['data']), true );
+                        $txt_soal = json_decode($string, true );
+                        
+                        if($soal['penulisan'] == "RTL"){
+                            $no = $this->Other_model->angka_arab($number).". ";
+                            $txt_soal['soal'] = str_replace("{no}", $no, $txt_soal['soal']);
+                        } else {
+                            $no = $number.". ";
+                            $txt_soal['soal'] = str_replace("{no}", $no, $txt_soal['soal']);
+                        }
+    
+                        $data['sesi'][$i]['soal'][$j]['id_item'] = $soal['id_item'];
+                        $data['sesi'][$i]['soal'][$j]['item'] = $soal['item'];
+                        $data['sesi'][$i]['soal'][$j]['data']['soal'] = $txt_soal['soal'];
+                        $data['sesi'][$i]['soal'][$j]['data']['jawaban'] = $txt_soal['jawaban'];
+                        $data['sesi'][$i]['soal'][$j]['penulisan'] = $soal['penulisan'];
+                        
+                        $number++;
+    
                     } else if($soal['item'] == "petunjuk" || $soal['item'] == "audio"){
                         $data['sesi'][$i]['soal'][$j] = $soal;
                     } else if($soal['audio']) {
@@ -161,6 +186,96 @@ class Soal extends CI_Controller {
         }
     }
 
+    public function add_jawaban_ielts(){
+        $id_tes = $this->input->post("id_tes");
+        $tes = $this->Main_model->get_one("tes", ["md5(id_tes)" => $id_tes]);
+        $soal = $this->Main_model->get_one("soal", ["id_soal" => $tes['id_soal']]);
+        $sesi = COUNT($this->Main_model->get_all("sesi_soal", ["id_soal" => $soal['id_soal']]));
+        $id_sub = $this->input->post("kunci_sesi");
+        
+        $text = "";
+        
+        for ($i=1; $i < $sesi+1; $i++) {
+            $benar = 0;
+            $salah = 0;
+            $nilai = "";
+            $id = $id_sub[$i-1];
+            $where = "id_sub = $id AND (item = 'soal' OR item = 'soal esai')";
+            $sub_soal = $this->Main_model->get_all("item_soal", $where);
+            $jawaban = $this->input->post("jawaban_sesi_".$i);
+            // $jum_soal = COUNT($sub_soal);
+            foreach ($sub_soal as $j => $sub_soal) {
+                // from json to array 
+                $string = trim(preg_replace('/\s+/', ' ', $sub_soal['data']));
+                $txt_soal = json_decode($string, true );
+
+                $sub_soal = $txt_soal['jawaban'];
+
+                if($sub_soal == $jawaban[$j]){
+                    $status = "benar";
+                    $benar++;
+                } else {
+                    $status = "salah";
+                    $salah++;
+                }
+
+                $no = $j+1;
+                $text .= '['.$i.','.$no.',"'.$jawaban[$j].'","'.$status.'"],';
+            }
+
+            if($i == 1){
+                $nilai_listening = $benar;
+            } elseif ($i == 2) {
+                $nilai_reading = $benar;
+            }
+        }
+
+        
+        $text = substr($text, 0, -1);
+        $text = '{"jawaban":['.$text.']}';
+
+        $data = [
+            "id_tes" => $tes['id_tes'],
+            "nama" => $this->input->post("nama"),
+            "t4_lahir" => $this->input->post("t4_lahir"),
+            "tgl_lahir" => $this->input->post("tgl_lahir"),
+            "alamat" => $this->input->post("alamat"),
+            "alamat_pengiriman" => $this->input->post("alamat_pengiriman"),
+            "no_wa" => $this->input->post("no_wa"),
+            "email" => $this->input->post("email"),
+            "jk" => $this->input->post("jk"),
+            "nilai_listening" => $nilai_listening,
+            "nilai_reading" => $nilai_reading,
+            "text" => $text,
+        ];
+
+        $this->Main_model->add_data("peserta_ielts", $data);
+        
+        // $skor = skor($nilai_listening, $nilai_structure, $nilai_reading);
+
+        $replacements = array(
+            '$nama' => $this->input->post("nama"),
+            '$t4_lahir' => $this->input->post("t4_lahir"),
+            '$tgl_lahir' => tgl_indo($this->input->post("tgl_lahir")),
+            '$alamat' => $this->input->post("alamat"),
+            '$alamat_pengiriman' => $this->input->post("alamat_pengiriman"),
+            '$no_wa' => $this->input->post("no_wa"),
+            '$email' => $this->input->post("email"),
+            '$jk' => $this->input->post("jk"),
+            '$nilai_listening' => $nilai_listening,
+            '$nilai_reading' => $nilai_reading,
+            '$tes' => $tes['nama_tes'],
+            '$tgl_tes' => tgl_indo($tes["tgl_tes"], "lengkap"),
+            '$tgl_pengumuman' => tgl_indo($tes["tgl_pengumuman"], "lengkap"),
+        );
+
+        $msg = str_replace(array_keys($replacements), $replacements, $tes['msg']);
+
+        $this->session->set_flashdata('pesan', $msg);
+
+        redirect(base_url("soal/id/".$id_tes), $data);
+    }
+
     public function add_jawaban_toefl(){
         $id_tes = $this->input->post("id_tes");
         $tes = $this->Main_model->get_one("tes", ["md5(id_tes)" => $id_tes]);
@@ -176,7 +291,8 @@ class Soal extends CI_Controller {
             $salah = 0;
             $nilai = "";
             $id = $id_sub[$i-1];
-            $sub_soal = $this->Main_model->get_all("item_soal", ["id_sub" => $id, "item" => "soal"]);
+            $where = "id_sub = $id AND (item = 'soal' OR item = 'soal esai')";
+            $sub_soal = $this->Main_model->get_all("item_soal", $where);
             $jawaban = $this->input->post("jawaban_sesi_".$i);
             // $jum_soal = COUNT($sub_soal);
             foreach ($sub_soal as $j => $sub_soal) {
@@ -269,7 +385,8 @@ class Soal extends CI_Controller {
 
         for ($i=1; $i < $sesi+1; $i++) {
             $id = $id_sub[$i-1];
-            $sub_soal = $this->Main_model->get_all("item_soal", ["id_sub" => $id, "item" => "soal"]);
+            $where = "id_sub = $id AND (item = 'soal' OR item = 'soal esai')";
+            $sub_soal = $this->Main_model->get_all("item_soal", $where);
             $jawaban = $this->input->post("jawaban_sesi_".$i);
             foreach ($sub_soal as $j => $sub_soal) {
                 // from json to array 
