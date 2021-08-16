@@ -201,7 +201,7 @@ class Soal extends CI_Controller {
             $nilai = "";
             $id = $id_sub[$i-1];
             $where = "id_sub = $id AND (item = 'soal' OR item = 'soal esai')";
-            $sub_soal = $this->Main_model->get_all("item_soal", $where);
+            $sub_soal = $this->Main_model->get_all("item_soal", $where, "urutan");
             $jawaban = $this->input->post("jawaban_sesi_".$i);
             // $jum_soal = COUNT($sub_soal);
             foreach ($sub_soal as $j => $sub_soal) {
@@ -291,7 +291,7 @@ class Soal extends CI_Controller {
             $nilai = "";
             $id = $id_sub[$i-1];
             $where = "id_sub = $id AND (item = 'soal' OR item = 'soal esai')";
-            $sub_soal = $this->Main_model->get_all("item_soal", $where);
+            $sub_soal = $this->Main_model->get_all("item_soal", $where, "urutan");
             $jawaban = $this->input->post("jawaban_sesi_".$i);
             // $jum_soal = COUNT($sub_soal);
             foreach ($sub_soal as $j => $sub_soal) {
@@ -385,7 +385,7 @@ class Soal extends CI_Controller {
         for ($i=1; $i < $sesi+1; $i++) {
             $id = $id_sub[$i-1];
             $where = "id_sub = $id AND (item = 'soal' OR item = 'soal esai')";
-            $sub_soal = $this->Main_model->get_all("item_soal", $where);
+            $sub_soal = $this->Main_model->get_all("item_soal", $where, "urutan");
             $jawaban = $this->input->post("jawaban_sesi_".$i);
             foreach ($sub_soal as $j => $sub_soal) {
                 // from json to array 
