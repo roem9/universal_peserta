@@ -342,7 +342,7 @@ class Soal extends CI_Controller {
 
         $this->Main_model->add_data("peserta_toefl", $data);
         
-        $skor = skor($nilai_listening, $nilai_structure, $nilai_reading);
+        $skor = skor($nilai_listening, $nilai_structure, $nilai_reading, "New");
 
         $replacements = array(
             '$nama' => $this->input->post("nama"),
@@ -353,9 +353,9 @@ class Soal extends CI_Controller {
             '$no_wa' => $this->input->post("no_wa"),
             '$email' => $this->input->post("email"),
             '$jk' => $this->input->post("jk"),
-            '$nilai_listening' => poin("Listening", $nilai_listening),
-            '$nilai_structure' => poin("Structure", $nilai_structure),
-            '$nilai_reading' =>poin("Reading", $nilai_reading),
+            '$nilai_listening' => poin("Listening", $nilai_listening, "New"),
+            '$nilai_structure' => poin("Structure", $nilai_structure, "New"),
+            '$nilai_reading' =>poin("Reading", $nilai_reading, "New"),
             '$tes' => $tes['nama_tes'],
             '$skor' => $skor,
             '$tgl_tes' => tgl_indo($tes["tgl_tes"], "lengkap"),
